@@ -83,7 +83,7 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg)
    try
     {
       recvImg=cv_bridge::toCvShare(msg, "bgr8")->image;//using for simulation display
-      namedWindow("Alignment",CV_WINDOW_AUTOSIZE);
+      namedWindow("Alignment",CV_WINDOW_NORMAL);
       cv::Mat operateImg=processOperateImg();
       imshow("Alignment", operateImg);
       setMouseCallback("Alignment", CallBackFunc2, NULL);
@@ -172,18 +172,7 @@ int main(int argc, char* argv[]){
            ROS_INFO_STREAM("rotation clockwise");
          }
         else if(13==keyPress){//"enter" //send out the points
-            // signature_visualization::pathData myPathData;
-            // myPathData.x=0;
-            // myPathData.y=0;
-            // myPathData.a=0;
-            // myPathData.theta=0;
-            // myPathData.targetx=0;
-            // myPathData.targety=0;
-            // myPathData.savingFlag=1;
-            // //do transformation.
-            // myPathData.u_path.push_back(1);
-            // myPathData.v_path.push_back(2);
-            // pubTask.publish(myPathData);
+
             size_t strokesNum=vPtSignature.size();
             if(strokesNum>0)
             {
@@ -194,6 +183,19 @@ int main(int argc, char* argv[]){
               pubTask2.publish(msg);
               published=true;
               ROS_INFO_STREAM("strokes topic published!");
+
+              signature_visualization::pathData myPathData;
+              myPathData.x=0;
+              myPathData.y=0;
+              myPathData.a=0;
+              myPathData.theta=0;
+              myPathData.targetx=0;
+              myPathData.targety=0;
+              myPathData.savingFlag=1;
+              //do transformation.
+              myPathData.u_path=math_helper::getU_Path(tfPoints);
+              myPathData.v_path=math_helper::getV_Path(tfPoints);
+              pubTask.publish(myPathData);
               continue;
             }
             else
