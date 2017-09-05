@@ -24,7 +24,7 @@ transformation2D::~transformation2D(){}
 Point2d transformation2D::doTransformation(Point2d p1)
 {
    //get the 2*3 transformation matrix
-   cout<<"p1"<<p1<<endl;
+   //cout<<"p1"<<p1<<endl;
    double r=rotation*CV_PI/180;
    p1.x=p1.x*scale-firstPoint.x;
    p1.y=p1.y*scale-firstPoint.y;

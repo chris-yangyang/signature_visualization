@@ -9,26 +9,26 @@
 #include "../include/math_helper.h"
 
 
- vector<int> math_helper::getU_Path(vector < vector < Point2d> > _inputPoints)//get U path from vector vector point
+ vector<short int> math_helper::getU_Path(vector < vector < Point2d> > _inputPoints)//get U path from vector vector point
  {
     size_t strokesNum=_inputPoints.size();
-    vector<int> u_path;
+    vector<short int> u_path;
     for(int i=0;i<strokesNum;i++)
        for(int j=0;j<_inputPoints[i].size();j++)
        {
-         u_path.push_back(_inputPoints[i][j].x);
+         u_path.push_back((int)(_inputPoints[i][j].x));
        }
     return u_path;
  }
 
- vector<int> math_helper::getV_Path(vector < vector < Point2d> > _inputPoints)//get V path from vector vector point
+ vector<short int> math_helper::getV_Path(vector < vector < Point2d> > _inputPoints)//get V path from vector vector point
  {
    size_t strokesNum=_inputPoints.size();
-   vector<int> v_path;
+   vector<short int> v_path;
    for(int i=0;i<strokesNum;i++)
       for(int j=0;j<_inputPoints[i].size();j++)
       {
-        v_path.push_back(_inputPoints[i][j].y);
+        v_path.push_back((int)(_inputPoints[i][j].y));
       }
    return v_path;
  }

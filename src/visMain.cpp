@@ -171,7 +171,7 @@ int main(int argc, char* argv[]){
            rotation -=rotationIncremental;
            ROS_INFO_STREAM("rotation clockwise");
          }
-        else if(13==keyPress){//"enter" //send out the points
+        else if(32==keyPress){//"space" //send out the points
 
             size_t strokesNum=vPtSignature.size();
             if(strokesNum>0)

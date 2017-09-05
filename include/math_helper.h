@@ -31,8 +31,8 @@ class math_helper
        double getPx(double x);
        double getRandX();
        double getRandY();
-       static vector<int> getU_Path(vector < vector < Point2d> > _inputPoints);//get U path from vector vector point
-       static vector<int> getV_Path(vector < vector < Point2d> > _inputPoints);//get V path from vector vector point
+       static vector<short int> getU_Path(vector < vector < Point2d> > _inputPoints);//get U path from vector vector point
+       static vector<short int> getV_Path(vector < vector < Point2d> > _inputPoints);//get V path from vector vector point
        //static vector< vector <path_point> > getBackStrokes(vector < vector < Point> > _inputPoints, vector<Eigen::Vector4f> path_robot_r, <Eigen::Vector4f> normals_robot_r);
       // static vector< vector <path_point> > getBackStrokes(vector < vector < Point> > _inputPoints, const normal_surface_calc::targetPoints::ConstPtr& msg);
 
