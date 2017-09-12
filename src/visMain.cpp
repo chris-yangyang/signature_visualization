@@ -72,7 +72,7 @@ cv::Mat processOperateImg()
          if(!published)
              cv::circle( tmp_img, tfPoints[m][n], 2.0, cv::Scalar( 0, 0, 255), 1, 2 );//mark the desired point
         else
-             cv::circle( tmp_img, tfPoints[m][n], 2.0, cv::Scalar( 0, 255, 0), 1, 2 );//mark the desired point
+             cv::circle( tmp_img, tfPoints[m][n], 2.0, cv::Scalar( 255, 0, 0), 1, 2 );//mark the desired point
    }
    //resetTransformations();
    return tmp_img;
@@ -108,7 +108,7 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg)
      if(strokesNum>0)
      {
          vPtSignature.clear();
-         vector<vector<Point> >().swap(vPtSignature);
+         vector<vector<Point> >().swap(vPtSignature);//doing another clear
          for(int i=0;i<strokesNum;i++)
          {
            string thisStroke=strokeStrs[i];
@@ -185,12 +185,12 @@ int main(int argc, char* argv[]){
               ROS_INFO_STREAM("strokes topic published!");
 
               signature_visualization::pathData myPathData;
-              myPathData.x=0;
-              myPathData.y=0;
+              myPathData.x=320;
+              myPathData.y=240;
               myPathData.a=0;
               myPathData.theta=0;
-              myPathData.targetx=0;
-              myPathData.targety=0;
+              myPathData.targetx=320;
+              myPathData.targety=240;
               myPathData.savingFlag=1;
               //do transformation.
               myPathData.u_path=math_helper::getU_Path(tfPoints);
