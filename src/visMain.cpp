@@ -29,6 +29,9 @@
 using namespace cv;
 using namespace std;
 
+ros::Publisher pubTask ;
+ros::Publisher pubTask2 ;
+
 vector<vector<Point> > vPtSignature;
 int keyPress;
 Point transPoint(280,100);//point for aligntment test, left click to set the translation point.
@@ -121,6 +124,33 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg)
          }
          published=false;
          //resetTransformations();
+
+         //#region adding the following codes will make the node constantly publishing tasks data.
+         size_t strokesNum=vPtSignature.size();
+         if(strokesNum>0)
+         {
+           transformation2D tf2D;
+           vector< vector<Point2d> > tfPoints=tf2D.doTransformation(transPoint, vPtSignature, scale, rotation);
+           std_msgs::String msg;
+           msg.data = string_convertor::constructPubStr(tfPoints);
+           pubTask2.publish(msg);
+           published=true;
+           ROS_INFO_STREAM("strokes topic published!");
+
+           signature_visualization::pathData myPathData;
+           myPathData.x=320;
+           myPathData.y=240;
+           myPathData.a=0;
+           myPathData.theta=0;
+           myPathData.targetx=320;
+           myPathData.targety=240;
+           myPathData.savingFlag=1;
+           //do transformation.
+           myPathData.u_path=math_helper::getU_Path(tfPoints);
+           myPathData.v_path=math_helper::getV_Path(tfPoints);
+           pubTask.publish(myPathData);
+         }
+         //#endregion
      }
  }
 
@@ -132,8 +162,8 @@ int main(int argc, char* argv[]){
 
   ros::init(argc, argv, "signature_vis");
   ros::NodeHandle nh;
-  ros::Publisher pubTask = nh.advertise<signature_visualization::pathData>("/path_data", 1, true);//task will be only published once
-  ros::Publisher pubTask2 = nh.advertise<std_msgs::String>("/chris/strokes", 1, true);//task will be only published once
+  pubTask = nh.advertise<signature_visualization::pathData>("/path_data", 1, true);//task will be only published once
+  pubTask2 = nh.advertise<std_msgs::String>("/chris/strokes", 1, true);//task will be only published once
   image_transport::ImageTransport it(nh);
   image_transport::Subscriber subImage = it.subscribe("/camera/rgb/image_rect_color", 1, imageCallback);///camera/rgb/image_rect_color  /usb_cam/image_raw
   ros::Subscriber sub2 = nh.subscribe("/chris/targetPoints_2D", 1000, signature_data_callback);
