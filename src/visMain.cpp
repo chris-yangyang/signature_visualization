@@ -75,9 +75,9 @@ cv::Mat processOperateImg()
      for(int m=0;m<tfPoints.size();m++)
        for(int n=0;n<tfPoints[m].size();n++)
          if(!published)
-             cv::circle( tmp_img, tfPoints[m][n], 2.0, cv::Scalar( 0, 0, 255), 1, 2 );//mark the desired point
+             cv::circle( tmp_img, tfPoints[m][n], 5.0, cv::Scalar( 0, 0, 255), -1, 2 );//mark the desired point
         else
-             cv::circle( tmp_img, tfPoints[m][n], 2.0, cv::Scalar( 255, 0, 0), 1, 2 );//mark the desired point
+             cv::circle( tmp_img, tfPoints[m][n], 5.0, cv::Scalar( 0, 0, 255), -1, 2 );//mark the desired point
    }
    //resetTransformations();
    return tmp_img;
