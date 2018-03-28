@@ -31,10 +31,11 @@ using namespace std;
 
 ros::Publisher pubTask ;
 ros::Publisher pubTask2 ;
+ros::Publisher pubTask3 ;
 
 vector<vector<Point> > vPtSignature;
 int keyPress;
-Point transPoint(280,100);//point for aligntment test, left click to set the translation point.
+Point transPoint(0,0);//point for aligntment test, left click to set the translation point.
 double scale=1;//middle click to set the scale.
 double scaleIncremental=0.1;
 double rotation=0;//rotation, defined in degrees. click
@@ -43,6 +44,7 @@ double rotationIncremental=1;
 //bool rotationMode=false;
 bool published=false;
 cv::Mat recvImg;
+sensor_msgs::ImagePtr imageMsg;
 
 void CallBackFunc2(int event, int x, int y, int flags, void* userdata);
 
@@ -55,8 +57,8 @@ void printOutDebugging()
 
 void resetTransformations()
 {
-  transPoint.x=280;
-  transPoint.y=100;
+  transPoint.x=0;
+  transPoint.y=0;
   scale=1.0;
   rotation=0;
 }
@@ -90,6 +92,10 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg)
       cv::Mat operateImg=processOperateImg();
       imshow("Alignment", operateImg);
       setMouseCallback("Alignment", CallBackFunc2, NULL);
+
+    // convert the new image to ros and publish it
+     imageMsg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", operateImg).toImageMsg();
+     pubTask3.publish(imageMsg);
       // cv::waitKey(30);
     }//end of try
     catch (cv_bridge::Exception& e)
@@ -118,7 +124,7 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg)
            vector<double> points=string_convertor::fromString2Array(thisStroke);
            size_t pointNum=points.size()/2;
            vector<Point> strokePoints;
-           for(int j=0;j<pointNum;j++)
+           for(int j=0;j<pointNum;j+=2)// downsampled every 5 points
                strokePoints.push_back(Point(points[2*j],points[2*j+1]));
            vPtSignature.push_back(strokePoints);
          }
@@ -160,10 +166,12 @@ void imageCallback(const sensor_msgs::ImageConstPtr& msg)
 
 int main(int argc, char* argv[]){
 
+
   ros::init(argc, argv, "signature_vis");
   ros::NodeHandle nh;
   pubTask = nh.advertise<signature_visualization::pathData>("/path_data", 1, true);//task will be only published once
   pubTask2 = nh.advertise<std_msgs::String>("/chris/strokes", 1, true);//task will be only published once
+  pubTask3 = nh.advertise<sensor_msgs::Image>("/path_image", 1);//task will be only published once
   image_transport::ImageTransport it(nh);
   image_transport::Subscriber subImage = it.subscribe("/camera/rgb/image_rect_color", 1, imageCallback);///camera/rgb/image_rect_color  /usb_cam/image_raw
   ros::Subscriber sub2 = nh.subscribe("/chris/targetPoints_2D", 1000, signature_data_callback);
@@ -187,6 +195,7 @@ int main(int argc, char* argv[]){
          }
          else if(114==keyPress){//r reset scale
            scale =1;
+
            ROS_INFO_STREAM("reset scale");
          }
          else if(122==keyPress){//z reset rotation

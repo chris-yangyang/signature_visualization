@@ -43,6 +43,7 @@ Point2d transformation2D::doTransformation(Point2d p1)
 
 vector< vector <Point2d> > transformation2D::doTransformation(Point2d _transPoint, vector < vector < Point> > _inputPoints, double _scale, double _rotation)
 {
+
   scale=_scale;
   rotation=_rotation;
   vector< vector < Point2d> > outputPoints;
@@ -52,6 +53,7 @@ vector< vector <Point2d> > transformation2D::doTransformation(Point2d _transPoin
    {
      firstPoint.x=_inputPoints[0][0].x*scale;
      firstPoint.y=_inputPoints[0][0].y*scale;
+     _transPoint = firstPoint;//set the first point of the path as the translation base
      relativeTransPoint.x=_transPoint.x - firstPoint.x;
      relativeTransPoint.y=_transPoint.y - firstPoint.y;
    }

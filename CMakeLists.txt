@@ -49,4 +49,4 @@ target_link_libraries(signature_vis
 #target_link_libraries(signature_vis ${VISP_LIBRARIES})
 
 #target_link_libraries(signature_vis lapack blas)
-target_link_libraries (signature_vis lib)
+target_link_libraries (signature_vis vis_lib)
